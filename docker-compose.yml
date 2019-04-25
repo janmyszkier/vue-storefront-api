@@ -4,7 +4,6 @@ services:
     container_name: elasticsearch
     build: docker/elasticsearch/
     volumes:
-      - ./docker/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
       - 'esdat1:/usr/share/elasticsearch/data'
     ports:
       - '9200:9200'

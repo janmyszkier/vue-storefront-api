@@ -60,18 +60,22 @@ function reIndex(db, fromIndexName, toIndexName, next) {
 }
 
 function createIndex(db, indexName, next) {
-  let indexSchema = loadSchema('index');
+
+  let pieces = indexName.split('_');
+  let indexFileName = pieces[pieces.length-1];
+  let indexSchema = loadSchema(indexFileName);
 
   const step2 = () => {
 
     db.indices.delete({
-      "index": indexName
+      "params": {
+        "index": indexName
+      }
     }).then(res1 => {
       console.dir(res1, { depth: null, colors: true })
       db.indices.create(
       {
         "index": indexName,
-        "body": indexSchema
       }).then(res2 => {
         console.dir(res2, { depth: null, colors: true })
         next()
@@ -83,7 +87,6 @@ function createIndex(db, indexName, next) {
       db.indices.create(
       {
         "index": indexName,
-        "body": indexSchema
       }).then(res2 => {
         console.dir(res2, { depth: null, colors: true })
         next()
@@ -177,6 +180,7 @@ function putMappings(db, indexName, next) {
       throw new Error(err2)
     })
   }).catch(err1 => {
+    console.log('failed')
     console.error(err1)
     next(err1)
   })

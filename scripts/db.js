@@ -57,17 +57,18 @@ program
       process.exit(1);
     }
 
-    console.log('** Hello! I am going to create NEW ES index')
-    const indexName = cmd.indexName
-    es.createIndex(common.db, indexName, function (err) {
-      if (err) {
-        console.log(err)
-      }
-
+    console.log('** Hello! I am going to create NEW ES index');
+    for (var indexSuffix of config.elasticsearch.indexTypes) {
+      const indexName = cmd.indexName + '_' + indexSuffix;
+      es.createIndex(common.db, indexName, function (err) {
+        if (err) {
+         console.log(err)
+        }
+      })
+   }
       console.log('Done! Bye!')
       process.exit(0)
-    })
-  })
+  });
 
 program
   .on('command:*', () => {
